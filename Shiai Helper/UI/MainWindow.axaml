@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:Shiai_Helper"
+        xmlns:ui="using:Shiai_Helper.UI"
+        xmlns:models="using:Shiai_Helper.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"        
+        x:Class="Shiai_Helper.MainWindow"
+        Title="Shiai Helper">
+  <Window.DataContext>
+    <local:ShiaiLoader/>
+  </Window.DataContext>
+  
+  <DockPanel>
+    <Border DockPanel.Dock="Top" BorderBrush="Black" BorderThickness="0,0,0,1">
+      <StackPanel Margin="8">
+        <TextBlock FontWeight="Bold">Aktueller Wettkampf</TextBlock>
+        <TextBlock Text="{Binding Path}"/>
+        <TextBlock Text="{Binding Tournament.Name}"/>
+        <Button Command="{Binding LoadShiai}">Shiai-Datei öffnen</Button>
+      </StackPanel>
+    </Border>
+    <TabControl>
+      <TabItem Header="Wiegelisten">
+        <ui:WeighingList Tournament="{Binding Tournament}"/>
+      </TabItem>
+      <TabItem Header="Vereinswertung">
+        <ui:ClubRanking Tournament="{Binding Tournament}"/>
+      </TabItem>
+    </TabControl>    
+  </DockPanel>
+    
+</Window>

@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:Shiai_Helper.UI"
+             xmlns:mdom="using:MigraDoc.DocumentObjectModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Shiai_Helper.UI.WeighingList">
+  <UserControl.Resources>
+    <ui:OrientationTranslator x:Key="orientationTranslator"/>
+  </UserControl.Resources>
+  <StackPanel Name="layoutRoot">
+    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+      <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Seitengröße: </TextBlock>
+      <ComboBox SelectedItem="{Binding PageSize}" Items="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+      <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Orientierung: </TextBlock>
+      <ComboBox SelectedItem="{Binding Orientation}" Items="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+    </StackPanel>
+    
+    <Button Command="{Binding CreatePdf}">PDF erzeugen</Button>
+  </StackPanel>
+</UserControl>
