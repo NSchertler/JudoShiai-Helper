@@ -10,8 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+- build:
     runs-on: windows-latest
 
     steps:
@@ -24,7 +23,7 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-  publish:
+- publish:
     - needs: build
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
