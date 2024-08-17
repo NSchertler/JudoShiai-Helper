@@ -27,4 +27,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
-      run: msbuild /target:publish
+      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ClickOnce Setup
+        path: publish
