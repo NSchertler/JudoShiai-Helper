@@ -27,8 +27,15 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x    
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
+    - name: Restore dependencies
+      run: dotnet restore    
     - name: Publish
       run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish
     - name: Upload build artifacts
