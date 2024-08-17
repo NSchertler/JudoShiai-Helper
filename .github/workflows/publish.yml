@@ -1,0 +1,34 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish
+
+on:
+  push:
+    branches: [ "master", "cicd" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:  
+  publish:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x    
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+    - name: Restore dependencies
+      run: dotnet restore    
+    - name: Publish
+      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ClickOnce Setup
+        path: |
+            Shiai Helper/publish/setup.exe
+            Shiai Helper/publish/Shiai Helper.application
+            Shiai Helper/publish/Application Files
