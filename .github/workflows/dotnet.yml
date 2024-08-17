@@ -19,13 +19,15 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
+        dotnet-version: 8.0.x    
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+  publish:
+    - needs: build
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
     - name: Publish
       run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish
     - name: Upload build artifacts
