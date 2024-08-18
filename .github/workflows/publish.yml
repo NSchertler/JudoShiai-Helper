@@ -32,3 +32,13 @@ jobs:
             Shiai Helper/publish/setup.exe
             Shiai Helper/publish/Shiai Helper.application
             Shiai Helper/publish/Application Files
+    - name: release
+      uses: actions/create-release@v1
+      with:
+        draft: false
+        prerelease: false
+        release_name: test-release
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
