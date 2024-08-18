@@ -20,12 +20,12 @@ jobs:
       uses: microsoft/setup-msbuild@v2
     - name: Get the version
       id: version
-      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"
       shell: bash
     - name: Restore dependencies
       run: dotnet restore    
     - name: Publish
-      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release      
+      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=${{ steps.version.outputs.VERSION }}
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -39,7 +39,7 @@ jobs:
       run: |
         $zip_path = "shiai-helper-windows_${{ steps.version.outputs.VERSION }}.zip"
         7z a $zip_path "Shiai Helper/publish/setup.exe" "Shiai Helper/publish/Shiai Helper.application" "Shiai Helper/publish/Application Files"        
-        echo "PATH=$zip_path >> $GITHUB_OUTPUT"
+        echo "PATH=$zip_path" >> "$GITHUB_OUTPUT"
     - name: upload windows artifact
       run: gh release upload ${{ steps.version.outputs.VERSION }} ${{ steps.zip.outputs.PATH }}
       env:
