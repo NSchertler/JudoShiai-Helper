@@ -39,7 +39,7 @@ jobs:
     - name: zip
       id: zip
       run: |
-        $zip_path = "shiai-helper-windows.zip" | Resolve-Path
+        $zip_path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("shiai-helper-windows.zip")
         cd "Shiai Helper/publish"
         7z a $zip_path "setup.exe" "Shiai Helper.application" "Application Files"        
         echo "PATH=$zip_path" >> $env:GITHUB_OUTPUT
