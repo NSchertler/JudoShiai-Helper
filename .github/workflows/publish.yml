@@ -18,10 +18,16 @@ jobs:
         dotnet-version: 8.0.x    
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
+    - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
     - name: Restore dependencies
       run: dotnet restore    
     - name: Publish
-      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release
+      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release      
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -31,8 +37,8 @@ jobs:
             Shiai Helper/publish/Shiai Helper.application
             Shiai Helper/publish/Application Files
     - name: zip
-      run: 7z a shiai-helper-windows_${{ github.ref }}.zip "Shiai Helper/publish/setup.exe" "Shiai Helper/publish/Shiai Helper.application" "Shiai Helper/publish/Application Files"        
+      run: 7z a shiai-helper-windows_${{ steps.branch_name.outputs.SOURCE_TAG }}.zip "Shiai Helper/publish/setup.exe" "Shiai Helper/publish/Shiai Helper.application" "Shiai Helper/publish/Application Files"        
     - name: upload windows artifact
-      run: gh release upload ${{ github.ref }} "shiai-helper-windows_${{ github.ref }}.zip"
+      run: gh release upload ${{ steps.branch_name.outputs.SOURCE_TAG }} "shiai-helper-windows_${{ steps.branch_name.outputs.SOURCE_TAG }}.zip"
       env:
           GITHUB_TOKEN: ${{ github.TOKEN }}    
