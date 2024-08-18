@@ -4,13 +4,11 @@
 name: Publish
 
 on:
-  push:
-    branches: [ "master", "cicd" ]
-  pull_request:
-    branches: [ "master" ]
+  release:
+    types: [published]
 
 jobs:  
-  publish:
+  publish-windows:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
@@ -32,13 +30,9 @@ jobs:
             Shiai Helper/publish/setup.exe
             Shiai Helper/publish/Shiai Helper.application
             Shiai Helper/publish/Application Files
-    - name: release
-      uses: actions/create-release@v1
-      with:
-        draft: false
-        prerelease: false
-        release_name: test-release
-        tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
+    - name: zip
+      run: 7z a shiai-helper-windows_${{ github.ref }}.zip "Shiai Helper/publish/setup.exe" "Shiai Helper/publish/Shiai Helper.application" "Shiai Helper/publish/Application Files"        
+    - name: upload windows artifact
+      run: gh release upload ${{ github.ref }} "shiai-helper-windows_${{ github.ref }}.zip"
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.TOKEN }}    
