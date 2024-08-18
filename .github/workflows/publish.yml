@@ -37,7 +37,7 @@ jobs:
     - name: zip
       id: zip
       run: |
-        $zip_path = shiai-helper-windows_${{ steps.version.outputs.VERSION }}.zip
+        $zip_path = "shiai-helper-windows_${{ steps.version.outputs.VERSION }}.zip"
         7z a $zip_path "Shiai Helper/publish/setup.exe" "Shiai Helper/publish/Shiai Helper.application" "Shiai Helper/publish/Application Files"        
         echo "PATH=$zip_path >> $GITHUB_OUTPUT"
     - name: upload windows artifact
