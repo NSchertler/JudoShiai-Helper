@@ -25,7 +25,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore    
     - name: Publish
-      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=${{ steps.version.outputs.VERSION }}
+      run: msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=${{steps.version.outputs.VERSION/v/}}
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
