@@ -5,9 +5,11 @@ name: .NET
 
 on:
   push:
-    branches: [ "master", "cicd" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - **
+  pull_request:    
+    branches:
+      - **
 
 jobs:
   build:
