@@ -35,7 +35,7 @@ jobs:
         if($Matches.3 -eq $null) { $Matches.3 = 0 }
         if($Matches.4 -eq $null) { $Matches.4 = 0 }
         $appVersion = "$($Matches.1).$($Matches.2).$($Matches.3).$($Matches.4)"
-        msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=${appVersion/v/}
+        msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=$appVersion
     - name: zip
       id: zip
       run: |
