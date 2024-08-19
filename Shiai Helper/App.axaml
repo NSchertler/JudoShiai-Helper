@@ -1,9 +1,10 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Shiai_Helper.App">
+             x:Class="Shiai_Helper.App"
+             RequestedThemeVariant="Light">
 
     <Application.Styles>
-      <FluentTheme Mode="Light"/>
+      <FluentTheme />
       <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 
       <Style Selector="Border.Group">        
@@ -12,5 +13,10 @@
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Margin" Value="0,0,0,4"/>
       </Style>
+
+      <Style Selector="DataGridRow:nth-child(odd)">
+        <Setter Property="Background" Value="LightGray"/>
+      </Style>
+      
     </Application.Styles>
 </Application>

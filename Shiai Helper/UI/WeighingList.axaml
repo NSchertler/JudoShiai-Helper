@@ -9,23 +9,43 @@
   <UserControl.Resources>
     <ui:OrientationTranslator x:Key="orientationTranslator"/>
   </UserControl.Resources>
-  <StackPanel Name="layoutRoot">
-    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-      <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Seitengröße: </TextBlock>
-      <ComboBox SelectedItem="{Binding PageSize}" Items="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
-    </StackPanel>
+  <Grid Name="layoutRoot">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="4"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="4"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
 
-    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-      <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Orientierung: </TextBlock>
-      <ComboBox SelectedItem="{Binding Orientation}" Items="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
-      </ComboBox>
-    </StackPanel>
+    <TextBlock VerticalAlignment="Center">Übersichtsseite:</TextBlock>
+    <ComboBox Grid.Column="2" SelectedItem="{Binding PageSizeOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
+    <ComboBox Grid.Column="4" SelectedItem="{Binding OrientationOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
+
+    <TextBlock Grid.Row="2" VerticalAlignment="Center">Wiegelisten:</TextBlock>
+    <ComboBox Grid.Row="2" Grid.Column="2" SelectedItem="{Binding PageSize}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
+    <ComboBox Grid.Row="2" Grid.Column="4" SelectedItem="{Binding Orientation}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>       
     
-    <Button Command="{Binding CreatePdf}">PDF erzeugen</Button>
-  </StackPanel>
+    <Button Grid.Row="4" Grid.ColumnSpan="5" HorizontalAlignment="Right" Command="{Binding CreatePdf}">PDF erzeugen</Button>
+  </Grid>
 </UserControl>

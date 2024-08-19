@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Microsoft.Data.Sqlite;
 using ReactiveUI;
 using Shiai_Helper.Models;
@@ -37,10 +38,10 @@ namespace Shiai_Helper
 
         public DbConnection? Connection { get; private set; }
 
-        public Window Parent { get; set; }
+        public Window? Parent { get; set; }
 
-        private Tournament tournament;
-        public Tournament Tournament 
+        private Tournament? tournament;
+        public Tournament? Tournament 
         {
             get => tournament;
             private set => this.RaiseAndSetIfChanged(ref tournament, value);
@@ -48,19 +49,24 @@ namespace Shiai_Helper
 
         public async void LoadShiai()
         {
-            var ofd = new OpenFileDialog();
-            ofd.AllowMultiple = false;
-            ofd.Title = "Wettkampf öffnen";
-            ofd.Filters!.Add(new FileDialogFilter() { Name = "Shiai-Datenbanken", Extensions = { "shi" } });
+            if (Parent == null)
+                throw new InvalidOperationException("The loader does not have an associated parent.");
 
-            var results = await ofd.ShowAsync(Parent);
+            var shiaiFilter = new FilePickerFileType("Shiai-Turniere");
+            shiaiFilter.Patterns = ["*.shi"];
+            var results = await Parent.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                AllowMultiple = false,
+                Title = "Wettkampf öffnen",
+                FileTypeFilter = [ shiaiFilter ]
+            });            
 
-            if (results == null)
+            if (!results.Any())
                 return;
 
             var file = results[0];
 
-            Path = file;
+            Path = file.Path.LocalPath;
             var t = new Tournament();
             Load(t);
             Tournament = t;            
@@ -76,7 +82,7 @@ namespace Shiai_Helper
 
             var command = Connection.CreateCommand();
             command.CommandText = @"SELECT value FROM info WHERE item='Competition'";
-            tournament.Name = command.ExecuteScalar().ToString();
+            tournament.Name = command.ExecuteScalar()!.ToString()!;
             
             RetrieveCategories(tournament);
             RetrieveCompetitors(tournament);
@@ -84,6 +90,9 @@ namespace Shiai_Helper
 
         private void RetrieveCompetitors(Tournament tournament)
         {
+            if (Connection == null)
+                throw new InvalidOperationException("There must be an active connection to retrieve tournament data.");
+
             tournament.Competitors.Clear();
 
             var command = Connection.CreateCommand();
@@ -124,6 +133,9 @@ namespace Shiai_Helper
 
         private void RetrieveCategories(Tournament tournament)
         {
+            if (Connection == null)
+                throw new InvalidOperationException("There must be an active connection to retrieve tournament data.");
+
             tournament.Categories.Clear();
 
             var command = Connection.CreateCommand();

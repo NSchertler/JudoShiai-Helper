@@ -1,0 +1,49 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:  
+  publish-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x    
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+    - name: Get the version
+      id: version
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - name: Restore dependencies
+      run: dotnet restore    
+    - name: Publish
+      run: |
+        "${{steps.version.outputs.VERSION}}" -match "(\d+)(?:\.(\d+))?(?:\.(\d+))?(?:\.(\d+))?"
+        if($Matches.1 -eq $null) { $Matches.1 = 0 }
+        if($Matches.2 -eq $null) { $Matches.2 = 0 }
+        if($Matches.3 -eq $null) { $Matches.3 = 0 }
+        if($Matches.4 -eq $null) { $Matches.4 = 0 }
+        $appVersion = "$($Matches.1).$($Matches.2).$($Matches.3).$($Matches.4)"
+        msbuild /target:publish /p:PublishProfile=Properties\PublishProfiles\ClickOnceProfile.pubxml /p:PublishDir=publish /p:Configuration=Release  /p:ApplicationVersion=$appVersion
+    - name: zip
+      id: zip
+      run: |
+        $zip_path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("shiai-helper-windows.zip")
+        cd "Shiai Helper/publish"
+        7z a $zip_path "setup.exe" "Shiai Helper.application" "Application Files"        
+        echo "PATH=$zip_path" >> $env:GITHUB_OUTPUT
+    - name: upload windows artifact
+      run: gh release upload ${{ steps.version.outputs.VERSION }} ${{ steps.zip.outputs.PATH }}
+      env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}    

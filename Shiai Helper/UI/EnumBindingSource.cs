@@ -11,8 +11,8 @@ namespace Shiai_Helper.UI
 
     public class EnumBindingSource : AvaloniaObject
     {
-        private Type _enumType;
-        public Type EnumType
+        private Type? _enumType;
+        public Type? EnumType
         {
             get { return this._enumType; }
             set

@@ -33,7 +33,7 @@ namespace Shiai_Helper.PDF
             var widthForPlaces = new Unit(1, UnitType.Centimeter);
             var widthForTotal = new Unit(1.5, UnitType.Centimeter);
             var availablePageWidth = pdf.DefaultPageSetup.PageWidth - pdf.DefaultPageSetup.LeftMargin - pdf.DefaultPageSetup.RightMargin;
-            var widthForClub = new Unit(availablePageWidth - widthForRank - widthForPlaces * nonTrivialPointsPerPlace.Count - widthForTotal);
+            var widthForClub = availablePageWidth - widthForRank - widthForPlaces * nonTrivialPointsPerPlace.Count - widthForTotal;
 
             table.AddColumn(widthForRank).Format.Alignment = ParagraphAlignment.Right;
             table.AddColumn(widthForClub);

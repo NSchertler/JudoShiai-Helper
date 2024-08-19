@@ -8,8 +8,8 @@ namespace Shiai_Helper.Models
 {
     public class ClubRanking
     {
-        public IList<ClubStatistics> ClubsSortedByRank { get; set; }
+        public IList<ClubStatistics> ClubsSortedByRank { get; set; } = [];
 
-        public ClubRankingOptions Options { get; set; }
+        public ClubRankingOptions Options { get; set; } = new ClubRankingOptions();
     }
 }

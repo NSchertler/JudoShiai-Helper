@@ -7,7 +7,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        var loader = (ShiaiLoader)DataContext;
-        loader!.Parent = this;        
+        var loader = DataContext as ShiaiLoader;
+        if (loader != null)
+            loader.Parent = this;        
     }
 }

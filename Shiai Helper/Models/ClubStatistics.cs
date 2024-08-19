@@ -11,7 +11,7 @@ namespace Shiai_Helper.Models
     {
         public int Rank { get; set; } = 0;
 
-        public string Club { get; set; }
+        public string Club { get; set; } = "";
 
         List<int> winnersByPlace = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0 };
 
