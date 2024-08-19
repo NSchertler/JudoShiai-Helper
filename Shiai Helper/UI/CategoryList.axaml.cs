@@ -7,7 +7,7 @@ using System;
 
 namespace Shiai_Helper.UI;
 
-public partial class CategoryList : ItemsControl, IStyleable
+public partial class CategoryList : ItemsControl
 {
     public static readonly StyledProperty<IBrush> ItemBackgroundProperty = AvaloniaProperty.Register<CategoryList, IBrush>(nameof(ItemBackground), new SolidColorBrush(Colors.Gray));
 
@@ -17,7 +17,7 @@ public partial class CategoryList : ItemsControl, IStyleable
         set => SetValue(ItemBackgroundProperty, value);
     }
 
-    Type IStyleable.StyleKey => typeof(ItemsControl);
+    protected override Type StyleKeyOverride => typeof(ItemsControl);
 
     public CategoryList()
     {

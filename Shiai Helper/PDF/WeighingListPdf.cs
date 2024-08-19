@@ -14,7 +14,9 @@ namespace Shiai_Helper.PDF
 {
     internal class WeighingListPdf
     {
-        public static void Create(Tournament tournament, string path, PageFormat pageSize, Orientation orientation)
+        public static void Create(Tournament tournament, string path,
+            PageFormat pageSizeOverview, Orientation orientationOverview,
+            PageFormat pageSize, Orientation orientation)
         {
             var groupingStrategy = new SimpleWeighingListGroupingStrategy();
 
@@ -22,7 +24,8 @@ namespace Shiai_Helper.PDF
 
             // Table of contents
             var tocSection = pdf.AddSection();
-            tocSection.PageSetup.PageFormat = PageFormat.A4;
+            tocSection.PageSetup.PageFormat = pageSizeOverview;
+            tocSection.PageSetup.Orientation = orientationOverview;
             tocSection.AddParagraph().AddFormattedText("Wiegelisten", new Font("Arial", 14));
             foreach (var sheet in groupingStrategy.EnumerateSheets(tournament))
             {
@@ -54,7 +57,7 @@ namespace Shiai_Helper.PDF
                 var widthForPassCheck = new Unit(1.5, UnitType.Centimeter);
                 var widthForWeight = new Unit(1.5, UnitType.Centimeter);
                 var availablePageWidth = pageWidth - pdf.DefaultPageSetup.LeftMargin - pdf.DefaultPageSetup.RightMargin;
-                var widthForName = new Unit(availablePageWidth - widthForNo - widthForId - widthForPassCheck - widthForWeight);
+                var widthForName = availablePageWidth - widthForNo - widthForId - widthForPassCheck - widthForWeight;
 
 
                 table.AddColumn(widthForNo).Format.Alignment = ParagraphAlignment.Right;

@@ -5,7 +5,7 @@
              xmlns:ui="using:Shiai_Helper.UI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Shiai_Helper.UI.ClubRanking"
-             x:DataType="ui:ClubRankingViewModel">  
+             x:DataType="ui:ClubRankingViewModel">
   <DockPanel Name="layoutRoot">
     <DockPanel.DataContext>
       <ui:ClubRankingViewModel/>
@@ -18,19 +18,19 @@
           <TextBlock Margin="0,0,8,0" VerticalAlignment="Center">Punkte für Platzierungen:</TextBlock>
 
           <TextBlock VerticalAlignment="Center">1. Pl.: </TextBlock>
-          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[0]}" Margin="0,0,16,0"/>
+          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[0]}" Margin="0,0,16,0" FormatString="0"/>
 
           <TextBlock VerticalAlignment="Center">2. Pl.: </TextBlock>
-          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[1]}" Margin="0,0,16,0"/>
+          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[1]}" Margin="0,0,16,0" FormatString="0"/>
 
           <TextBlock VerticalAlignment="Center">3. Pl.: </TextBlock>
-          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[2]}" Margin="0,0,16,0"/>
+          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[2]}" Margin="0,0,16,0" FormatString="0"/>
 
           <TextBlock VerticalAlignment="Center">5. Pl.: </TextBlock>
-          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[3]}" Margin="0,0,16,0"/>
+          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[3]}" Margin="0,0,16,0" FormatString="0"/>
 
           <TextBlock VerticalAlignment="Center">7. Pl.: </TextBlock>
-          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[4]}" Margin="0,0,16,0"/>
+          <NumericUpDown Minimum="0" Maximum="100" Value="{Binding PointsForPlace[4]}" Margin="0,0,16,0" FormatString="0"/>
         </WrapPanel>
       </StackPanel>
     </Border>
@@ -40,23 +40,23 @@
         <TextBlock FontWeight="Bold">Kategorien</TextBlock>
 
         <TextBlock>Noch nicht ausgelost:</TextBlock>
-        <ui:CategoryList Items="{Binding CategoriesNotDrawn}" ItemBackground="LightPink"/>
+        <ui:CategoryList ItemsSource="{Binding CategoriesNotDrawn}" ItemBackground="LightPink"/>
 
         <TextBlock>Laufend:</TextBlock>
-        <ui:CategoryList Items="{Binding CategoriesInProgress}" ItemBackground="Orange"/>
+        <ui:CategoryList ItemsSource="{Binding CategoriesInProgress}" ItemBackground="Orange"/>
 
         <TextBlock>Durchgekämpft:</TextBlock>
-        <ui:CategoryList Items="{Binding CategoriesAllFought}" ItemBackground="LightGray"/>
+        <ui:CategoryList ItemsSource="{Binding CategoriesAllFought}" ItemBackground="LightGray"/>
 
         <TextBlock>Abgeschlossen:</TextBlock>
-        <ui:CategoryList Items="{Binding CategoriesFinished}" ItemBackground="LightGreen"/>
+        <ui:CategoryList ItemsSource="{Binding CategoriesFinished}" ItemBackground="LightGreen"/>
       </StackPanel>
       
     </Border>
     
     <Button Command="{Binding CreatePdf}" DockPanel.Dock="Top">PDF erzeugen</Button>
 
-    <DataGrid Items="{Binding ClubRanking.ClubsSortedByRank}" AlternatingRowBackground="LightGray" IsReadOnly="True">
+    <DataGrid ItemsSource="{Binding ClubRanking.ClubsSortedByRank}" IsReadOnly="True">
       <DataGrid.Columns>
         <DataGridTextColumn Header="Platz"  Binding="{Binding Rank}"/>
         <DataGridTextColumn Header="Verein" Binding="{Binding Club}" />

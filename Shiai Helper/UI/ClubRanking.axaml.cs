@@ -22,6 +22,9 @@ using Shiai_Helper.PDF;
 using Avalonia.VisualTree;
 using Avalonia.LogicalTree;
 using System.Threading.Tasks;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using Avalonia.Platform.Storage;
 
 namespace Shiai_Helper.UI
 {
@@ -64,7 +67,7 @@ namespace Shiai_Helper.UI
         public ObservableCollection<string> CategoriesInProgress { get; } = new ObservableCollection<string>();
         public ObservableCollection<string> CategoriesAllFought { get; } = new ObservableCollection<string>();        
         public ObservableCollection<string> CategoriesFinished { get; } = new ObservableCollection<string>();
-        public Window? Window { get; set; }
+        public TopLevel? TopLevel { get; set; }
 
         public ClubRankingViewModel()
         {
@@ -128,15 +131,20 @@ namespace Shiai_Helper.UI
         {
             if (ClubRanking == null)
                 throw new InvalidOperationException("The club ranking has not been calculated yet.");
-            if (Window == null)
+            if (TopLevel == null)
                 throw new InvalidOperationException("This view model is not attached to a window.");
 
-            var sfd = new SaveFileDialog();
-            sfd.Filters = [new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } }];
-            sfd.InitialFileName = "Vereinswertung.pdf";
-            var filename = await sfd.ShowAsync(Window);
-            if (filename == null)
+            var file = await TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+            {
+                SuggestedFileName = "Vereinswertung.pdf",
+                DefaultExtension = "pdf",
+                FileTypeChoices = [FilePickerFileTypes.Pdf]
+            });
+            
+            if (file == null)
                 return;
+
+            var filename = file.Path.LocalPath;
 
             try
             {
@@ -146,10 +154,10 @@ namespace Shiai_Helper.UI
             }
             catch(Exception x)
             {
-                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                  .GetMessageBoxStandardWindow("Fehler", "Beim Erstellen der PDF ist ein Fehler aufgetreten: " + x.Message,
-                                                MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                await messageBoxStandardWindow.ShowDialog(Window);
+                var messageBoxStandardWindow = MessageBoxManager
+                  .GetMessageBoxStandard("Fehler", "Beim Erstellen der PDF ist ein Fehler aufgetreten: " + x.Message,
+                                                ButtonEnum.Ok, Icon.Error);
+                await messageBoxStandardWindow.ShowAsPopupAsync(TopLevel);
             }            
         }
     }

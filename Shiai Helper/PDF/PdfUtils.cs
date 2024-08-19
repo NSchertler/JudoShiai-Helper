@@ -1,12 +1,5 @@
 ﻿using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
-using PdfSharp.Fonts;
-using PdfSharp.Snippets.Font;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shiai_Helper.PDF
 {
@@ -14,8 +7,8 @@ namespace Shiai_Helper.PDF
     {
         public static Document SetupDocument()
         {
-            if (GlobalFontSettings.FontResolver == null)
-                GlobalFontSettings.FontResolver = new NewFontResolver();
+            //if (GlobalFontSettings.FontResolver == null)
+            //    GlobalFontSettings.FontResolver = new NewFontResolver();
             var pdf = new Document();
 
             return pdf;

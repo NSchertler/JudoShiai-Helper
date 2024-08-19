@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Metadata;
+using Avalonia.Platform.Storage;
 using MigraDoc.DocumentObjectModel;
 using ReactiveUI;
 using Shiai_Helper.Models;
@@ -31,27 +32,33 @@ public class WeighingListViewModel : ReactiveObject, ITournamentBasedViewModel
         get => tournament;
         set => this.RaiseAndSetIfChanged(ref tournament, value);
     }
-    public Window? Window { get; set; }
+    public TopLevel? TopLevel { get; set; }
 
     public PageFormat PageSize { get; set; } = PageFormat.A5;
 
-    public Orientation Orientation { get; set; } = Orientation.Portrait;
+    public Orientation Orientation { get; set; } = Orientation.Landscape;
+
+    public PageFormat PageSizeOverview { get; set;} = PageFormat.A4;
+    public Orientation OrientationOverview { get; set; } = Orientation.Portrait;
 
     public async void CreatePdf()
     {
         if (Tournament == null)
             return;
-        if (Window == null)
+        if (TopLevel == null)
             throw new InvalidOperationException("This view model is not attached to a window.");
 
-        var sfd = new SaveFileDialog();
-        sfd.Filters = [new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } }];
-        sfd.InitialFileName = "Wiegeliste.pdf";
-        var path = await sfd.ShowAsync(Window);
-        if (path == null)
+        var file = await TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+        {
+            DefaultExtension = "pdf",
+            SuggestedFileName = "Wiegeliste.pdf",
+            FileTypeChoices = [FilePickerFileTypes.Pdf]
+        });
+        
+        if (file == null)
             return;
-        WeighingListPdf.Create(Tournament, path, PageSize, Orientation);
-        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        WeighingListPdf.Create(Tournament, file.Path.LocalPath, PageSizeOverview, OrientationOverview, PageSize, Orientation);
+        Process.Start(new ProcessStartInfo(file.Path.LocalPath) { UseShellExecute = true });
     }
 
     [DependsOn(nameof(Tournament))]

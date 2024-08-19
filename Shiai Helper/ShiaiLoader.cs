@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Microsoft.Data.Sqlite;
 using ReactiveUI;
 using Shiai_Helper.Models;
@@ -50,19 +51,22 @@ namespace Shiai_Helper
         {
             if (Parent == null)
                 throw new InvalidOperationException("The loader does not have an associated parent.");
-            var ofd = new OpenFileDialog();
-            ofd.AllowMultiple = false;
-            ofd.Title = "Wettkampf öffnen";
-            ofd.Filters!.Add(new FileDialogFilter() { Name = "Shiai-Datenbanken", Extensions = { "shi" } });
 
-            var results = await ofd.ShowAsync(Parent);
+            var shiaiFilter = new FilePickerFileType("Shiai-Turniere");
+            shiaiFilter.Patterns = ["*.shi"];
+            var results = await Parent.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                AllowMultiple = false,
+                Title = "Wettkampf öffnen",
+                FileTypeFilter = [ shiaiFilter ]
+            });            
 
-            if (results == null)
+            if (!results.Any())
                 return;
 
             var file = results[0];
 
-            Path = file;
+            Path = file.Path.LocalPath;
             var t = new Tournament();
             Load(t);
             Tournament = t;            
