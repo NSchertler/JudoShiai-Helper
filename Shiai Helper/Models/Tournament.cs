@@ -9,7 +9,7 @@ namespace Shiai_Helper.Models
 {
     public class Tournament : ReactiveObject
     {
-        private string name;
+        private string name = "";
         public string Name 
         {
             get => name; 

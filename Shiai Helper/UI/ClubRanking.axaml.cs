@@ -31,7 +31,7 @@ namespace Shiai_Helper.UI
         { 
             InitializeComponent();
 
-            vm = (ClubRankingViewModel)layoutRoot.DataContext;
+            vm = (ClubRankingViewModel)layoutRoot.DataContext!;
         }
     }
 
@@ -64,7 +64,7 @@ namespace Shiai_Helper.UI
         public ObservableCollection<string> CategoriesInProgress { get; } = new ObservableCollection<string>();
         public ObservableCollection<string> CategoriesAllFought { get; } = new ObservableCollection<string>();        
         public ObservableCollection<string> CategoriesFinished { get; } = new ObservableCollection<string>();
-        public Window Window { get; set; }
+        public Window? Window { get; set; }
 
         public ClubRankingViewModel()
         {
@@ -74,8 +74,8 @@ namespace Shiai_Helper.UI
             PointsForPlace.Add(3);
             PointsForPlace.Add(0);
 
-            PointsForPlace.CollectionChanged += PointsForPlace_CollectionChanged;
-            PointsForPlace_CollectionChanged(null, null);
+            PointsForPlace.CollectionChanged += (s, e) => PointsForPlaceChanged();
+            PointsForPlaceChanged();
         }
 
         public void Calculate()
@@ -98,7 +98,7 @@ namespace Shiai_Helper.UI
                 targetList.AddRange(Tournament.Categories.Where(c => c.Value.State == categoryState).OrderBy(c => c.Value.Name).Select(c => c.Value.Name));
         }
 
-        private void PointsForPlace_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void PointsForPlaceChanged()
         {
             rankingOptions.SetAwardedPointsForPlace(1, PointsForPlace[0]);
             rankingOptions.SetAwardedPointsForPlace(2, PointsForPlace[1]);
@@ -126,8 +126,13 @@ namespace Shiai_Helper.UI
 
         async Task CreateRankingPdf(Tournament tournament)
         {
+            if (ClubRanking == null)
+                throw new InvalidOperationException("The club ranking has not been calculated yet.");
+            if (Window == null)
+                throw new InvalidOperationException("This view model is not attached to a window.");
+
             var sfd = new SaveFileDialog();
-            sfd.Filters.Add(new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } });
+            sfd.Filters = [new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } }];
             sfd.InitialFileName = "Vereinswertung.pdf";
             var filename = await sfd.ShowAsync(Window);
             if (filename == null)
@@ -144,7 +149,7 @@ namespace Shiai_Helper.UI
                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                   .GetMessageBoxStandardWindow("Fehler", "Beim Erstellen der PDF ist ein Fehler aufgetreten: " + x.Message,
                                                 MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                messageBoxStandardWindow.ShowDialog(Window);
+                await messageBoxStandardWindow.ShowDialog(Window);
             }            
         }
     }

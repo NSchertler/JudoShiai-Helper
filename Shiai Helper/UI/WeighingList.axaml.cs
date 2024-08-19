@@ -7,6 +7,7 @@ using MigraDoc.DocumentObjectModel;
 using ReactiveUI;
 using Shiai_Helper.Models;
 using Shiai_Helper.PDF;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -30,7 +31,7 @@ public class WeighingListViewModel : ReactiveObject, ITournamentBasedViewModel
         get => tournament;
         set => this.RaiseAndSetIfChanged(ref tournament, value);
     }
-    public Window Window { get; set; }
+    public Window? Window { get; set; }
 
     public PageFormat PageSize { get; set; } = PageFormat.A5;
 
@@ -40,9 +41,11 @@ public class WeighingListViewModel : ReactiveObject, ITournamentBasedViewModel
     {
         if (Tournament == null)
             return;
+        if (Window == null)
+            throw new InvalidOperationException("This view model is not attached to a window.");
 
         var sfd = new SaveFileDialog();
-        sfd.Filters.Add(new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } });
+        sfd.Filters = [new FileDialogFilter() { Name = "PDF-Datei", Extensions = new List<string>() { "pdf" } }];
         sfd.InitialFileName = "Wiegeliste.pdf";
         var path = await sfd.ShowAsync(Window);
         if (path == null)

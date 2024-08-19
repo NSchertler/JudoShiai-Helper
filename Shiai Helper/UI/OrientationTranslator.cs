@@ -11,8 +11,11 @@ namespace Shiai_Helper.UI
 {
     public class OrientationTranslator : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            if (value == null)
+                return null;
+
             var or = (Orientation)value;
             switch(or)
             {
@@ -24,7 +27,7 @@ namespace Shiai_Helper.UI
             return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {            
             return null;
         }

@@ -37,10 +37,10 @@ namespace Shiai_Helper
 
         public DbConnection? Connection { get; private set; }
 
-        public Window Parent { get; set; }
+        public Window? Parent { get; set; }
 
-        private Tournament tournament;
-        public Tournament Tournament 
+        private Tournament? tournament;
+        public Tournament? Tournament 
         {
             get => tournament;
             private set => this.RaiseAndSetIfChanged(ref tournament, value);
@@ -48,6 +48,8 @@ namespace Shiai_Helper
 
         public async void LoadShiai()
         {
+            if (Parent == null)
+                throw new InvalidOperationException("The loader does not have an associated parent.");
             var ofd = new OpenFileDialog();
             ofd.AllowMultiple = false;
             ofd.Title = "Wettkampf öffnen";
@@ -76,7 +78,7 @@ namespace Shiai_Helper
 
             var command = Connection.CreateCommand();
             command.CommandText = @"SELECT value FROM info WHERE item='Competition'";
-            tournament.Name = command.ExecuteScalar().ToString();
+            tournament.Name = command.ExecuteScalar()!.ToString()!;
             
             RetrieveCategories(tournament);
             RetrieveCompetitors(tournament);
@@ -84,6 +86,9 @@ namespace Shiai_Helper
 
         private void RetrieveCompetitors(Tournament tournament)
         {
+            if (Connection == null)
+                throw new InvalidOperationException("There must be an active connection to retrieve tournament data.");
+
             tournament.Competitors.Clear();
 
             var command = Connection.CreateCommand();
@@ -124,6 +129,9 @@ namespace Shiai_Helper
 
         private void RetrieveCategories(Tournament tournament)
         {
+            if (Connection == null)
+                throw new InvalidOperationException("There must be an active connection to retrieve tournament data.");
+
             tournament.Categories.Clear();
 
             var command = Connection.CreateCommand();

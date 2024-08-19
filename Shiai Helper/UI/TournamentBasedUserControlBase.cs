@@ -21,15 +21,23 @@ namespace Shiai_Helper.UI
 
         public Tournament? Tournament
         {
-            get => vm.Tournament;
-            set => vm.Tournament = value;
+            get => vm?.Tournament;
+            set
+            {
+                if(vm != null)
+                    vm.Tournament = value;
+            }
         }
 
-        protected TViewModel vm;
+        protected TViewModel? vm;
 
         public TournamentBasedUserControlBase()
         {
-            this.AttachedToVisualTree += (s, e) => vm.Window = this.FindAncestorOfType<Window>();
+            this.AttachedToVisualTree += (s, e) =>
+            {
+                if (vm != null)
+                    vm.Window = this.FindAncestorOfType<Window>();
+            };
         }
     }
 
