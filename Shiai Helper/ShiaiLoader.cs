@@ -110,6 +110,7 @@ namespace Shiai_Helper
                     comp.LastName = reader.GetString("last");
                     comp.Club = reader.GetString("club");
                     comp.CoachId = reader.GetString("coachId");
+                    comp.WeightKilograms = reader.GetDouble("weight") / 1000;
 
                     var category = reader.GetString("regcategory");
                     var flags = reader.GetInt32("deleted");

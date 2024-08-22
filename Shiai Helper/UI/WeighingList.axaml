@@ -16,19 +16,23 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="4"/>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="4"/>
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="4"/>
-      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
 
     <TextBlock VerticalAlignment="Center">Übersichtsseite:</TextBlock>
-    <ComboBox Grid.Column="2" SelectedItem="{Binding PageSizeOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
-    <ComboBox Grid.Column="4" SelectedItem="{Binding OrientationOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
+    <ComboBox Grid.Column="2" SelectedItem="{Binding Options.PageSizeOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
+    <ComboBox Grid.Column="4" SelectedItem="{Binding Options.OrientationOverview}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
@@ -37,15 +41,18 @@
     </ComboBox>
 
     <TextBlock Grid.Row="2" VerticalAlignment="Center">Wiegelisten:</TextBlock>
-    <ComboBox Grid.Row="2" Grid.Column="2" SelectedItem="{Binding PageSize}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
-    <ComboBox Grid.Row="2" Grid.Column="4" SelectedItem="{Binding Orientation}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
+    <ComboBox Grid.Row="2" Grid.Column="2" SelectedItem="{Binding Options.PageSize}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:PageFormat}}}"/>
+    <ComboBox Grid.Row="2" Grid.Column="4" SelectedItem="{Binding Options.Orientation}" ItemsSource="{Binding Source={ui:EnumBindingSource {x:Type mdom:Orientation}}}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Text="{Binding Converter={StaticResource orientationTranslator}}"/>
         </DataTemplate>
       </ComboBox.ItemTemplate>
-    </ComboBox>       
+    </ComboBox>
+
+    <CheckBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" IsChecked="{Binding Options.UseExactWeight}">Exaktes Gewicht anstelle der registrierten Gewichtsklasse eintragen</CheckBox>
+    <CheckBox Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" IsChecked="{Binding Options.AddCheckColumn}">Bestätigungsspalte</CheckBox>
     
-    <Button Grid.Row="4" Grid.ColumnSpan="5" HorizontalAlignment="Right" Command="{Binding CreatePdf}">PDF erzeugen</Button>
+    <Button Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" Command="{Binding CreatePdf}">PDF erzeugen</Button>
   </Grid>
 </UserControl>

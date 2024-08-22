@@ -34,12 +34,7 @@ public class WeighingListViewModel : ReactiveObject, ITournamentBasedViewModel
     }
     public TopLevel? TopLevel { get; set; }
 
-    public PageFormat PageSize { get; set; } = PageFormat.A5;
-
-    public Orientation Orientation { get; set; } = Orientation.Landscape;
-
-    public PageFormat PageSizeOverview { get; set;} = PageFormat.A4;
-    public Orientation OrientationOverview { get; set; } = Orientation.Portrait;
+    public WeighingListOptions Options { get; } = new WeighingListOptions();
 
     public async void CreatePdf()
     {
@@ -57,7 +52,7 @@ public class WeighingListViewModel : ReactiveObject, ITournamentBasedViewModel
         
         if (file == null)
             return;
-        WeighingListPdf.Create(Tournament, file.Path.LocalPath, PageSizeOverview, OrientationOverview, PageSize, Orientation);
+        WeighingListPdf.Create(Tournament, file.Path.LocalPath, Options);
         Process.Start(new ProcessStartInfo(file.Path.LocalPath) { UseShellExecute = true });
     }
 

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shiai_Helper.Models
+﻿namespace Shiai_Helper.Models
 {
     public class Competitor
     {
@@ -19,6 +12,8 @@ namespace Shiai_Helper.Models
         public string AgeCategory { get; set; } = "";
 
         public string WeightCategory { get; set; } = "";
+
+        public double WeightKilograms { get; set; } = 0;
 
         public Gender Gender { get; set; } = Gender.Unknown;
 
