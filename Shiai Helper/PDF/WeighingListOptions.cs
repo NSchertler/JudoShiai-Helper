@@ -13,5 +13,9 @@ namespace Shiai_Helper.PDF
 
         public bool UseExactWeight { get; set; } = false;
         public bool AddCheckColumn { get; set; } = false;
+
+        public bool SeparateByAgeCategory { get; set; } = true;
+
+        public bool SeparateByGender { get; set; } = true;
     }
 }

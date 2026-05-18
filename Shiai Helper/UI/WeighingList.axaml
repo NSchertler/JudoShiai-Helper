@@ -20,6 +20,10 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="4"/>
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="4"/>
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
@@ -52,7 +56,11 @@
 
     <CheckBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" IsChecked="{Binding Options.UseExactWeight}">Exaktes Gewicht anstelle der registrierten Gewichtsklasse eintragen</CheckBox>
     <CheckBox Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="3" IsChecked="{Binding Options.AddCheckColumn}">Bestätigungsspalte</CheckBox>
+
+    <TextBlock Grid.Row="8" Grid.Column="0">Blattaufteilung</TextBlock>
+    <CheckBox Grid.Row="8" Grid.Column="2" IsChecked="{Binding Options.SeparateByAgeCategory}">Nach Alterklasse</CheckBox>
+    <CheckBox Grid.Row="10" Grid.Column="2" IsChecked="{Binding Options.SeparateByGender}">Nach Geschlecht</CheckBox>
     
-    <Button Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" Command="{Binding CreatePdf}">PDF erzeugen</Button>
+    <Button Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="3" Command="{Binding CreatePdf}">PDF erzeugen</Button>
   </Grid>
 </UserControl>

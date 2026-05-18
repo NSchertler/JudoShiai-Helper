@@ -2,7 +2,6 @@
 using MigraDoc.DocumentObjectModel.Tables;
 using Shiai_Helper.Calculations.WeighingList;
 using Shiai_Helper.Models;
-using SkiaSharp;
 using System;
 using System.Linq;
 
@@ -13,7 +12,11 @@ namespace Shiai_Helper.PDF
         public static void Create(Tournament tournament, string path,
             WeighingListOptions options)
         {
-            var groupingStrategy = new SimpleWeighingListGroupingStrategy();
+            var groupingStrategy = new SimpleWeighingListGroupingStrategy()
+            {
+                SeparateByAgeCategory = options.SeparateByAgeCategory,
+                SeparateByGender = options.SeparateByGender
+            };
 
             var pdf = PdfUtils.SetupDocument();
 
@@ -85,7 +88,7 @@ namespace Shiai_Helper.PDF
                     row.VerticalAlignment = VerticalAlignment.Center;
                     row.Cells[0].AddParagraph(i.ToString());
                     row.Cells[1].AddParagraph(competitor.Id.ToString());
-                    row.Cells[2].AddParagraph($"{competitor.LastName}, {competitor.FirstName}" + Environment.NewLine + competitor.Club);
+                    row.Cells[2].AddParagraph($"{competitor.LastName}, {competitor.FirstName}");
                     
                     if(options.UseExactWeight)
                         row.Cells[4].AddParagraph($"{competitor.WeightKilograms} kg");
